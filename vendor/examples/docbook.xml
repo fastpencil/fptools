@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <info>
+    <title>The Sentinel</title>
+    <titleabbrev>The Sentinel</titleabbrev>
+    <date>2011-08-08</date>
+    <pubdate>2011-08-08</pubdate>
+    <author>
+      <personname>Daniel Abboudi</personname>
+    </author>
+    <legalnotice>
+      <para>The Publisher makes no representations or warranties with respect to the accuracy or completeness of the contents of this book and specifically disclaim any implied warranties of merchantability or fitness for a particular purpose. Neither the publisher nor author shall be liable for any loss of profit or any commercial damages.</para>
+    </legalnotice>
+    <publisher>
+      <publishername>FastPencil, Inc.</publishername>
+      <address>
+        <street>3131 Bascom Ave.</street>
+        <otheraddr>Suite 150</otheraddr>
+        <city>Campbell</city>
+        <state>CA</state>
+        <postcode>95008</postcode>
+        <country>USA</country>
+        <phone>(408) 540-7571</phone>
+        <fax>(408) 540-7572</fax>
+        <email>info@fastpencil.com</email>
+        <uri type="website">http://www.fastpencil.com</uri>
+      </address>
+    </publisher>
+    <edition>First Edition</edition>
+  </info>
+<chapter>
+  <info>
+    <title>The Beginning</title>
+    <titleabbrev>The Beginning</titleabbrev>
+  </info>
+<para/></chapter>
+</book>

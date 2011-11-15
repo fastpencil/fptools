@@ -1,4 +1,6 @@
-require 'java'
+require "java"
+require "rubygems"
+require "bundler/setup"
 
 current_path = File.dirname(__FILE__)
 
