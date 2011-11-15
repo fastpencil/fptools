@@ -1,4 +1,4 @@
-module Itext
+module Pdf
   class GutterGenerator
 
     def self.generate(in_file, out_file)

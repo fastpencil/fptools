@@ -1,4 +1,4 @@
-module Itext
+module Pdf
   class PdfxStamper
 
     # Takes an existing PDF file, pads it to a multiple of four, PDF/X stamps

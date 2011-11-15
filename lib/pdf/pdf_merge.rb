@@ -1,4 +1,4 @@
-module Itext
+module Pdf
   class PdfMerge
 
     def self.merge(input_files, output_file)

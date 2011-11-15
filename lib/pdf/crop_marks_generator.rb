@@ -1,4 +1,4 @@
-module Itext
+module Pdf
   class CropMarksGenerator
     class << self
 
