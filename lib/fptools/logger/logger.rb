@@ -2,7 +2,10 @@ require 'logger'
 
 module Fptools
   class Logger
-    LOG_FILE = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'log', 'fptools.log'))
+    LOG_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'log'))
+    LOG_FILE = File.join(LOG_DIR, 'fptools.log')
+    FileUtils.mkdir_p(LOG_DIR)
+
     LOGGER = ::Logger.new(LOG_FILE)
 
     class << self
