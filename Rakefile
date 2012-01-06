@@ -1,10 +1,8 @@
-$LOAD_PATH.unshift("lib")
+require 'rake'
+require 'rake/testtask'
 
-task 'write_init_d', [:out_to] do |task, args|
-  require 'rubygems'
-  require 'fptools'
-
-  File.open(args[:out_to], 'w') do |out|
-    Fptools::InitD.create(out, {})
-  end
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/test*.rb']
+  t.verbose = true
 end

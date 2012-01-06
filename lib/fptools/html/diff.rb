@@ -4,12 +4,10 @@ module Fptools
   module Html
     class Diff
       import java.util.Locale
-
       import javax.xml.transform.sax.SAXTransformerFactory
       import javax.xml.transform.stream.StreamResult
       import org.xml.sax.InputSource
       import org.xml.sax.helpers.AttributesImpl
-
       import org.outerj.daisy.diff
       import org.outerj.daisy.diff.html
       import org.outerj.daisy.diff.html.dom

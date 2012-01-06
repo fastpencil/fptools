@@ -12,19 +12,14 @@
 #
 module Fptools
   module Epub
-    class Validator
-      def initialize(file)
-        @file = java.io.File.new(file)
-      end
+    class EpubValidator
+      attr_reader :report
 
-      def validate
-        @errors   = []
-        epubcheck = Java::ComAdobeEpubcheckApi::EpubCheck.new(@file, self.report)
-        valid     = epubcheck.validate
-      end
-
-      def report
-        @report ||= Report.new
+      def validate(file)
+        @report = Report.new
+        file = java.io.File.new(file)
+        epubcheck = Java::ComAdobeEpubcheckApi::EpubCheck.new(file, @report)
+        epubcheck.validate
       end
 
       class Report

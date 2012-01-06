@@ -11,27 +11,26 @@ module Fptools
       @builder    = Java::OrgApacheAvalonFrameworkConfiguration::DefaultConfigurationBuilder.new
       @config     = @builder.build_from_file(java.io.File.new(config_file.path))
       @generator  = Java::OrgKrysalisBarcode4j::BarcodeUtil.get_instance().create_barcode_generator(@config)
-      @message    = options.delete(:number)
       self
     ensure
       config_file.unlink if config_file
     end
 
     # Generates EPS version of barcode.
-    def generate_eps(filename)
+    def generate_eps(filename,message)
       out = java.io.FileOutputStream.new(java.io.File.new(filename))
       provider = Java::OrgKrysalisBarcode4jOutputEps::EPSCanvasProvider.new(out, 0)
-      @generator.generate_barcode(provider, @message)
+      @generator.generate_barcode(provider, message)
       provider.finish
       filename
     end
 
     # Generates PNG version of barcode.
     # May not be supported in headless environments.
-    def generate_png(filename)
+    def generate_png(filename,message)
       out = java.io.FileOutputStream.new(java.io.File.new(filename))
       provider = Java::OrgKrysalisBarcode4jOutputBitmap::BitmapCanvasProvider.new(out, "image/x-png", 300, java.awt.image.BufferedImage::TYPE_BYTE_GRAY, true, 0)
-      @generator.generate_barcode(provider, @message)
+      @generator.generate_barcode(provider, message)
       provider.finish
       filename
     end
@@ -40,9 +39,9 @@ module Fptools
 
     def generate_config_file(options={})
       doc = Nokogiri::XML::Builder.new do |xml|
-        xml.barcode(:message => @message) do
+        xml.barcode do
           xml.ean13 do
-            xml.module-width('0.4mm')
+            xml.tag! 'module-width', '0.4mm'
           end
         end
       end
