@@ -1,6 +1,8 @@
 module Fptools
   module Pdf
     class PdfxStamper
+      include_package 'com.itextpdf.text'
+      include_package 'com.itextpdf.text.pdf'
 
       # Takes an existing PDF file, pads it to a multiple of four, PDF/X stamps
       # it, and places a bar code on the last page.
@@ -14,17 +16,19 @@ module Fptools
       #    be true. (nil)
       def self.stamp(orig_file, output_file, options = {})
         default_options = {
-          :bar_code_file => nil,
-          :pad_file => false
+          :bar_code_file   => nil,
+          :bar_code_width  => 144,
+          :bar_code_height => 72,
+          :pad_file        => false
         }
         options = default_options.update(options)
 
-        orig       = Java::ComItextpdfTextPdf::PdfReader.new(orig_file)
+        orig       = PdfReader.new(orig_file)
         orig_dims  = orig.getPageSizeWithRotation(1)
         orig_pages = orig.getNumberOfPages
-        output     = Java::ComItextpdfText::Document.new(orig_dims, 0, 0, 0, 0)
+        output     = Document.new(orig_dims, 0, 0, 0, 0)
         out_stream = java.io.FileOutputStream.new(output_file)
-        writer     = Java::ComItextpdfTextPdf::PdfWriter.getInstance(output, out_stream)
+        writer     = PdfWriter.getInstance(output, out_stream)
 
         writer.setPDFXConformance(1)
 
@@ -40,8 +44,7 @@ module Fptools
           page_rotation = (0 - orig.getPageRotation(page_num))
           page_size     = orig.getPageSizeWithRotation(page_num)
 
-          img = Java::ComItextpdfText::Image.java_send :getInstance,
-            [Java::ComItextpdfTextPdf::PdfTemplate], page
+          img = Image.java_send :getInstance, [PdfTemplate], page
           img.setRotationDegrees(page_rotation)
 
           output.add(img)
@@ -65,19 +68,17 @@ module Fptools
           end
 
           if options[:bar_code_file]
-            bar_code_awt = java.awt.AwtToolkit.getDefaultToolkit.createImage(options[:bar_code_file])
-            bar_code_image = Java::ComItextpdfText::Image.getInstance(bar_code_awt, nil)
-            bar_code_image.scaleToFit(144, 72)
-            bar_code_image.setAlignment(Java::ComItextpdfText::Image::ALIGN_CENTER)
+            bar_code_image = Image.get_instance(options[:bar_code_file])
+            bar_code_image.scaleToFit(options[:bar_code_width],
+                                      options[:bar_code_height])
+            bar_code_image.setAlignment(Image::ALIGN_CENTER)
             output.add(bar_code_image)
           end
 
-          Java::ComItextpdfText::FontFactory.register 'vendor/fonts/arial.ttf', 'Arial'
-          font = Java::ComItextpdfText::FontFactory.getFont('Arial',
-                                                            Java::ComItextpdfTextPdf::BaseFont::CP1252,
-                                                            Java::ComItextpdfTextPdf::BaseFont::EMBEDDED, 8)
-          para = Java::ComItextpdfText::Paragraph.new("Published by FastPencil\nhttp://www.fastpencil.com", font)
-          para.setAlignment Java::ComItextpdfText::Paragraph::ALIGN_CENTER
+          base_font = BaseFont.create_font(BaseFont::HELVETICA, BaseFont::CP1252, true)
+          font = Font.new(base_font, 8)
+          para = Paragraph.new("Published by FastPencil\nhttp://www.fastpencil.com", font)
+          para.setAlignment Paragraph::ALIGN_CENTER
           output.add para
         end
 

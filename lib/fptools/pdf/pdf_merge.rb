@@ -1,13 +1,15 @@
 module Fptools
   module Pdf
     class PdfMerge
+      include_package 'com.itextpdf.text'
+      include_package 'com.itextpdf.text.pdf'
 
       def self.merge(input_files, output_file)
         output_stream = java.io.FileOutputStream.new(output_file)
-        copy = Java::ComItextpdfTextPdf::PdfCopyFields.new(output_stream)
+        copy = PdfCopyFields.new(output_stream)
 
         input_files.each do |f|
-          reader = Java::ComItextpdfTextPdf::PdfReader.new(f)
+          reader = PdfReader.new(f)
           copy.addDocument(reader)
         end
 

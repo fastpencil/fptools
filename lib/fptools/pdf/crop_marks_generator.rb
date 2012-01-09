@@ -1,8 +1,10 @@
 module Fptools
   module Pdf
     class CropMarksGenerator
-      class << self
+      include_package 'com.itextpdf.text'
+      include_package 'com.itextpdf.text.pdf'
 
+      class << self
         def mark(in_file, out_file, options={})
           default_options = {
             :margin_width      => 36,
@@ -16,7 +18,7 @@ module Fptools
           }
           options = default_options.update(options)
 
-          orig = Java::ComItextpdfTextPdf::PdfReader.new(in_file)
+          orig = PdfReader.new(in_file)
           orig_dims = orig.getPageSizeWithRotation(1)
 
           w = (orig_dims.width + (options[:margin_width] * 2))
@@ -26,10 +28,10 @@ module Fptools
             w += options[:right_bleed]
           end
 
-          doc_dims = Java::ComItextpdfText::Rectangle.new(w, h)
-          output = Java::ComItextpdfText::Document.new(doc_dims, 0, 0, 0, 0)
-          writer = Java::ComItextpdfTextPdf::PdfWriter.getInstance(output,
-                                                                   java.io.FileOutputStream.new(out_file))
+          doc_dims = Rectangle.new(w, h)
+          output = Document.new(doc_dims, 0, 0, 0, 0)
+          writer = PdfWriter.getInstance(output,
+                                         java.io.FileOutputStream.new(out_file))
           writer.setPDFXConformance(1)
 
           output.open
@@ -43,9 +45,7 @@ module Fptools
 
             page = writer.getImportedPage(orig, 1)
             page_rotation = (0 - orig.getPageRotation(1))
-            img = Java::ComItextpdfText::Image.java_send(:getInstance,
-                                                         [Java::ItextpdfTextPdf::PdfTemplate],
-                                                         page)
+            img = Image.java_send(:getInstance, [PdfTemplate], page)
             img.setRotationDegrees(page_rotation)
             img.setAbsolutePosition(options[:margin_width].to_f,
                                     options[:margin_height].to_f)
@@ -67,9 +67,7 @@ module Fptools
 
               page = writer.getImportedPage(orig, page_num)
               page_rotation = (0 - orig.getPageRotation(page_num))
-              img = Java::ComItextpdfText::Image.java_send(:getInstance,
-                                                           [Java::ComItextpdfTextPdf::PdfTemplate],
-                                                           page)
+              img = Image.java_send(:getInstance, [PdfTemplate], page)
               img.setRotationDegrees(page_rotation)
               img.setAbsolutePosition(x_pos.to_f, options[:margin_width].to_f)
 
